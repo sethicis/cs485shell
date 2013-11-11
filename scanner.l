@@ -8,23 +8,24 @@
 %}
 
 /******* Definitions *******/
-delim	[\t ]
-ws		{delim}+
-alpha	[a-zA-Z]
-path	[{alpha}/]
-db		(debug){delim}+
-cd		(chdir){ws}{path}+
+delim   [\t ]
+ws      {delim}+
+alpha   [a-zA-Z]
+path    [a-zA-Z//]
+db      (debug){delim}+
+cd      (chdir){ws}{path}+
+EOL     (\n)
+word    {path}+
+string  (\".+\")
+meta    [<>#]
 
 /******* Rules ********/
 %%
-{ws}						{/*Do nothing*/}
-"setprompt"{ws}{alpha}+		{printf("saw pset\n");}
-{db}"on"					{printf("Turning Debug ON\n");}
-{db}"off"				{printf("Turning Debug OFF\n");}
-{cd}			{printf("Saw a CD command\n");}
-"quit"			{printf("I QUIT!!!\n"); return 0;}		/* Terminates the program */
-<<EOF>>			{printf("Saw an EOF\n");return 0;}
-.				{/*Do nothing*/}
+{ws}				{/*Do nothing*/}
+{word}              {printf("Saw a word: %s\n",yytext);}
+{string}            {printf("Saw a string: %s\n",yytext);}
+<<EOF>>             {printf("Saw an EOF\n");return 0;}
+.                   {/*Do nothing*/}
 %%
 /******* User Code ******/
 int yywrap(void){return 1;}
