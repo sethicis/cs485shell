@@ -1,15 +1,26 @@
 /* 
-This file right now works as a test driver for the Unix shell program.
-In it's current incarnation it only calls the scan function to test the flex
-file, but it may be expanded in the future. This entry point could be modified
-to work as an entry point for the finished program as well.
+ main.c
+ 
+ This is the entry point function for the Unix Shell Project for
+ CS 485.
+ Created by Libby and Kyle
+ 
+ This module initalizes the first Token
+ 
 */
-#include "global.h"
+
+#include <stdio.h>  /* Used for I\O */
+#include <stdlib.h> /* Used for malloc */
+#include "global.h" /* Used for global variables */
 
 int main(int argc,char** argv){
-	if (scan() == 0)
-		printf("Exitting Successfully!\n");
-	else
-		printf("ERROR! Exitting!\n");
-	return 0;
+    /* Initalize fTok on startup */
+    fTok = newToken();
+    while (scan() == 0) { /* While the EOF flag is not seen keep 
+                           scanning and parsing */
+        parse();
+    }
+	printf("Exitting!\n");  /* TODO: Remove print statement */
+    free(fTok);             /* Clean up the last memory leak */
+    return 0;
 }

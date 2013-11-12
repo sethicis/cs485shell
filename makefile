@@ -1,20 +1,29 @@
 #Makefile for CS485 project 3
 #Created by Libby and Kyle
 GCC = gcc -Wall -pedantic
-OBJECTS = lex.yy.o main.o
+OBJECTS = lex.yy.o main.o stripper.o tokenGen.o
 HEADERS = global.h
 
-ioShell: $(OBJECTS)
-	$(GCC) $(OBJECTS) -o ioShell
+ioShell: $(OBJECTS) pTest.o
+	$(GCC) $(OBJECTS) pTest.o -o ioShell
 
-lex.yy.o: lex.yy.c $(HEADERS)
+lex.yy.o: $(HEADERS) lex.yy.c
 	$(GCC) -c lex.yy.c
 
 lex.yy.c: scanner.l
 	flex scanner.l
 
-main.o: global.h main.c
+main.o: $(HEADERS) main.c
 	$(GCC) -c main.c
 
+stripper.o: $(HEADERS) stripper.c
+	$(GCC) -c stripper.c
+
+tokenGen.o: $(HEADERS) tokenGen.c
+	$(GCC) -c tokenGen.c
+
+pTest.o: $(HEADERS) pTest.c
+	$(GCC) -c pTest.c
+
 clean:
-	-rm -f $(OBJECTS) ioShell
+	-rm -f $(OBJECTS) pTest.o lex.yy.c ioShell

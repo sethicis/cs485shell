@@ -2,46 +2,65 @@
  stripper.c
  
   Created by Kyle Blagg on 11/8/13.
+ This module contains the linking function for inserting tokens into
+ the linked list and the stripOut function used to remove the quotes
+ from STRING type tokens.
 
 */
 
-#include <stdio.h>
-#include <string.h>
-#include "global.h"
+#include <stdio.h>      /* Used for i/o and some string operations */
+#include <string.h>     /* Used for string operations */
+#include "global.h"     /* Used for global defines */
 
-token* strip(char* match, char* strTok){
-    token* tok = newToken();
-    char* str = stripOut(match,strTok);
-    char* str = stripOut('"',str);
+/* 
+ NOTE: If token pointer does not change calling function values change function
+ to return token* */
+token* linkTok(token* tok, char* TYPE,char* value){
+        /* Case: token type WORD */
+    if (strcmp(TYPE,TWORD) == 0){
+        assignTok(tok,value,TYPE); /* Assign the token values */
+            /* Create a new token, set it's previous pointer to the current token,
+             then set the current token's next pointer to the new token. */
+        token* tmpTok = newToken();
+        tmpTok->prev = tok;
+        tok->next = tmpTok;
+        return tmpTok;
+    }
+        /* Case: token type STRING */
+    else if (strcmp(TYPE,TSTRING) == 0){
+        stripOut(value);
+        assignTok(tok,value,TYPE);
+        token* tmpTok = newToken();
+        tmpTok->prev = tok;
+        tok->next = tmpTok;
+        return tmpTok;
+    }
+        /* Case: token type META */
+    else if (strcmp(TYPE,TMETA) == 0){
+        assignTok(tok,value,TYPE);
+        token* tmpTok = newToken();
+        tmpTok->prev = tok;
+        tok->next = tmpTok;
+        return tmpTok;
+    }
+        /* Case: token type EOL */
+    else if (strcmp(TYPE,TEOL) == 0){
+        assignTok(tok,"EOL\0",TYPE); /* End of line token */
+        tok->next = NULL;           /* End of line token marks end of list */
+        return tok;       /* End of linked list of tokens */
+    }
+    else{
+        printf("Error: Token type does not match any expected values\n");
+        return NULL;
+    }
 }
 
-char* stripOut(char* match, char* strTok){
-    int first = -1,second = -1,terminate = 0;
-    /* int terminate = 0; */
-    for (int i=0; i<sizeof(strTok); i++) {
-        if (first == -1) {
-            if (strTok[i] == match[0]) {
-                first = i;
-            }
-        }
-        else if(second == -1){
-            if (strTok[i] == match[sizeof(match)-1]){
-                second = i;
-            }
-        }
-        else{
-            terminate = 1;
-        }
+/* This helper function is designed to remove the Quotation marks
+ From STRING type tokens.
+ */
+void stripOut(char* tokVal){
+    for (int i =0;i<strlen(tokVal)-2;i++){
+        tokVal[i] = tokVal[i+1];
     }
-    if (terminate != 1) {
-        /* char* str[1];
-        return str[0] = '\0'; */
-        return strTok;
-    }else{
-        int size = second - first;
-        char* str[size+1];
-        strncpy(str,strTok[first],size);
-        str[sizeof(str)-1] = '\0';
-        return str;
-    }
+    tokVal[strlen(tokVal)-2] = '\0'; /* insert the new null terminating char */
 }
