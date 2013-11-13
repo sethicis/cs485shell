@@ -59,7 +59,8 @@ token* linkTok(token* tok, char* TYPE,char* value){
  From STRING type tokens.
  */
 void stripOut(char* tokVal){
-    for (int i =0;i<strlen(tokVal)-2;i++){
+    int i; /* for loop index */
+    for (i = 0;i<strlen(tokVal)-2;i++){
         tokVal[i] = tokVal[i+1];
     }
     tokVal[strlen(tokVal)-2] = '\0'; /* insert the new null terminating char */

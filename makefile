@@ -26,4 +26,4 @@ pTest.o: $(HEADERS) pTest.c
 	$(GCC) -c pTest.c
 
 clean:
-	-rm -f $(OBJECTS) pTest.o lex.yy.c ioShell
+	-rm -f *.o lex.yy.c ioShell
