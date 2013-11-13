@@ -9,6 +9,7 @@
 
 #include <stdio.h>      /* NOTE: May not be needed */
 #include <stdlib.h>     /* for malloc */
+#include <string.h>	/* Needed for strlen */
 #include "global.h"     /* For global values */
 
 /* This function generates a new token */
