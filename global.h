@@ -15,10 +15,6 @@ Edit Date: 11/10/2013 */
 /* NOTE: The Buffer defines may not be needed anymore */
 #define MAXBUFF         256 /* Maximum buffer size for value string */
 #define TYPEBUFF        20  /* Maximum buffer size for type strings */
-/*const char* TWORD = "WORD";
-const char* TSTRING = "STRING";
-const char* TMETA = "META";
-const char* TEOL = "\n";*/
 #define TWORD           "word\0"
 #define TSTRING         "string\0"
 #define TMETA           "metachar\0"
@@ -30,8 +26,6 @@ struct token{
 /*@param val: the actual contents of the token (eg. filepath) 
   @param type: the token type (WORD, STRING, METACHAR, EOL)
   @param next: pointer to next token in sequence */
-typedef struct{
->>>>>>> .merge_file_45E4lD
     char* val;
     char* type;
     token* next; /* Pointer to next token */
@@ -40,7 +34,7 @@ typedef struct{
 token* fTok; /* Global pointer to the first token in the linked list */
 
 int scan(void);         /* Scans stdin */
-token* newToken(void);  /* Generates a new token */<<<<<<< .merge_file_aGrjS4
+token* newToken(void);  /* Generates a new token */
 token* linkTok(token*,char*,char*);   /* Inserts token into linked list */
 void assignTok(token*,char*,char*);   /* Assigns the value and type to the given token */
 void parse(void);                  /* Parse the linked list of tokens */
