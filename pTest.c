@@ -1,3 +1,4 @@
+/*
 //
 //  pTest.c
 //  
@@ -6,6 +7,7 @@
 //  This module is used for testing the token linked list
 //  and can be used as an example for how to traverse the linked list.
 //
+*/
 
 #include <stdio.h>
 #include "global.h"
