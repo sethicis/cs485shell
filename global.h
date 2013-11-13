@@ -1,11 +1,8 @@
-<<<<<<< .merge_file_aGrjS4
-=======
 /* This file is holds all the global variables and information needed for the modules in this program to work.
 Created by: Kyle
 Date: 11/8/2013
 Last Edit by: Libby
 Edit Date: 11/10/2013 */
->>>>>>> .merge_file_45E4lD
 
 /* global.h */
 
@@ -28,10 +25,8 @@ const char* TEOL = "\n";*/
 #define TEOL            "end-of-line\0"
 
 /* Our token "object" that will be passed around */
-<<<<<<< .merge_file_aGrjS4
 typedef struct token token;
 struct token{
-=======
 /*@param val: the actual contents of the token (eg. filepath) 
   @param type: the token type (WORD, STRING, METACHAR, EOL)
   @param next: pointer to next token in sequence */
@@ -50,5 +45,4 @@ token* linkTok(token*,char*,char*);   /* Inserts token into linked list */
 void assignTok(token*,char*,char*);   /* Assigns the value and type to the given token */
 void parse(void);                  /* Parse the linked list of tokens */
 void stripOut(char*);              /* Removes the quotes from string type tokens */
-=======
->>>>>>> .merge_file_45E4lD
+
