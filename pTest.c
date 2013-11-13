@@ -1,11 +1,11 @@
-//
-//  pTest.c
-//  
-//
-//  Created by Kyle Blagg on 11/11/13.
-//  This module is used for testing the token linked list
-//  and can be used as an example for how to traverse the linked list.
-//
+/*
+*  pTest.c
+  
+
+*  Created by Kyle Blagg on 11/11/13.
+*  This module is used for testing the token linked list
+*  and can be used as an example for how to traverse the linked list.
+*/
 
 #include <stdio.h>
 #include "global.h"
