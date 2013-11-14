@@ -20,6 +20,7 @@ token* newToken(){
     mTok->type = NULL;
     mTok->next = NULL;
     mTok->prev = NULL;
+    mTok->usage = NIL;  /* No usage yet */
     return mTok;
 }
 

@@ -13,14 +13,6 @@
 #include <stdlib.h> /* Used for malloc */
 #include "global.h" /* Used for global variables */
 
-/* This function is used to change the cPrompt
- for the ioShell
- @param str: The c string to set the cPrompt to.*/
-void chPrompt(char* str){
-    free(cPrompt);
-    cPrompt = str;
-}
-
 int main(int argc,char** argv){
     /* Initalize fTok on startup */
     fTok = newToken();

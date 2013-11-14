@@ -24,6 +24,19 @@ char* cPrompt;  /* The prompt for the ioShell program */
 
 /* Our token "object" that will be passed around */
 typedef struct token token;
+/* Defines the enum set for token usage */
+typedef enum{
+    NIL = 0,
+    COMMENT = 1,
+    SPROMPT = 2,
+    DEBUG = 3,
+    CD = 4,
+    BIN = 5,
+    META = 6,
+    QUIT = 7,
+    STRING = 8,
+    ARG = 9
+} tUsage;
 struct token{
 /*@param val: the actual contents of the token (eg. filepath) 
   @param type: the token type (WORD, STRING, METACHAR, EOL)
@@ -32,7 +45,9 @@ struct token{
     char* type;
     token* next; /* Pointer to next token */
     token* prev; /* Pointer to previous token */
+    tUsage usage; /* Usage of token */
 };
+
 token* fTok; /* Global pointer to the first token in the linked list */
 
 void chPrompt(char*);   /* Simple helper function that sets the terminal prompt */
