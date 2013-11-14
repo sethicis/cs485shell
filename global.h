@@ -20,6 +20,8 @@ Edit Date: 11/10/2013 */
 #define TMETA           "metachar\0"
 #define TEOL            "end-of-line\0"
 
+char* cPrompt;  /* The prompt for the ioShell program */
+
 /* Our token "object" that will be passed around */
 typedef struct token token;
 struct token{
@@ -33,6 +35,7 @@ struct token{
 };
 token* fTok; /* Global pointer to the first token in the linked list */
 
+void chPrompt(char*);   /* Simple helper function that sets the terminal prompt */
 int scan(void);         /* Scans stdin */
 token* newToken(void);  /* Generates a new token */
 token* linkTok(token*,char*,char*);   /* Inserts token into linked list */
