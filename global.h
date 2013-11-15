@@ -19,6 +19,15 @@ Edit Date: 11/10/2013 */
 #define TSTRING         "string\0"
 #define TMETA           "metachar\0"
 #define TEOL            "end-of-line\0"
+#define USETPROMPT	"setprompt\0"
+#define UPOUND		"#\0"
+#define UCHDIR		"chdir\0"
+#define UDEBUG		"debug\0"
+#define UOFF		"off\0"
+#define UON		"on\0"
+#define UQUIT		"quit\0"
+
+
 
 char* cPrompt;  /* The prompt for the ioShell program */
 

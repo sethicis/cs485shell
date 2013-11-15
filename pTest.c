@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "global.h"
 #include <stdlib.h>
+#include <string.h>
 
 /* Deletes the dynamically allocated tokens */
 void cleanup(token* lTok){
@@ -27,16 +28,64 @@ void parse(){
     int count = 1;
     token* tok = fTok;
     token* lTok = NULL;
+    token* reader = fTok;
     while (tok != NULL) {
-        printf("\t\tToken #: %d\n",count);
-        printf("\t\tToken Type: %s\n",tok->type);
-        printf("\t\tToken Value: %s\n\n",tok->val);
+
+/*Recognize comment lines*/
+    if (strcmp(reader->val, UPOUND) == 0) {
+      while (tok->next != NULL) {
+        tok = tok->next;
+      }
+    }
+
+/*Recognize setprompt*/
+    else if (strcmp(reader->val, USETPROMPT) == 0) {
+      reader = reader->next;
+      if (strcmp(reader->type, TSTRING) != 0) {
+        printf("Cannot set prompt without a string!\n");
+      }
+      else {
+        reader = reader->next;
+        if (strcmp(reader->type, TEOL) != 0) {
+          printf("Cannot take multiple arguments in setprompt!\n");
+        }
+        else {
+	  printf("I will set your prompt\n");
+        }
+      } 
+   }
+
+/*Recognize chdir*/
+    else if (strcmp(reader->val, UCHDIR) == 0) {
+      reader = reader->next;
+      if (strcmp(reader->type, TMETA) == 0) {
+	printf("Cannot use a metacharacter in chdir command./n");
+      }
+      else if (strcmp(reader->type, TEOL) == 0) {
+	printf("You must enter a directory name!");
+      }
+      else {
+	reader = reader->next;
+	if (strcmp(reader->type, TEOL) != 0) {
+          printf("Cannot handle multiple arguments in a chdir request./n");
+	}
+	else {
+	  printf("I will change directory/n");
+        }
+      }
+    }  
+
+  while (tok->next != NULL) {
+    tok = tok->next;
+  }
+
+			
         if (tok->next == NULL){ /* Keep track of the last token to save
                                  computation time when deleting */
             lTok = tok;
         }
         tok = tok->next;
         count++;
-    }
     cleanup(lTok); /* Remove the no longer needed tokens */
+}
 }
