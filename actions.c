@@ -23,6 +23,9 @@ void decide(){
             if (strcmp(fTok->next->val,"on\0")) {
                 debugFlag = 1;
             }
+            if (strcmp) {
+                <#statements#>
+            }
         case CD:
         default:
             break;

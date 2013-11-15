@@ -61,6 +61,7 @@ struct token{
 };
 
 token* fTok; /* Global pointer to the first token in the linked list */
+token* lTok; /* Global pointer to the last token in the linked list */
 
 void chPrompt(char*);   /* Simple helper function that sets the terminal prompt */
 int scan(void);         /* Scans stdin */
