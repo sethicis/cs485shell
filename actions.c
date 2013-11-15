@@ -39,13 +39,13 @@ void decide(){
                     debugFlag = 0;
                 }else{
                     /* The token value after debug was not of the expected form */
-                    printf("Error: 'debug [on|off]' parameter passed was: %s\n",fTok->next->val);
+                    printf("-iosh: Illegal syntax. 'debug [on|off]' parameter passed was: %s\n",fTok->next->val);
                 }
                 break;
             case CD:
                 /* Change working directory, and if error notify */
                 if (chdir(fTok->next->val) != 0) {
-                    printf("Error: Directory %s either does not exist or cannot be accessed\n",fTok->next->val);
+                    printf("-iosh: chdir %s Error. Directory %s either does not exist or cannot be accessed\n",fTok->next->val,fTok->next->val);
                 }
                 printf("The working directory is: %s\n",getcwd(wkDir,(size_t)pathSize));
                 break;
@@ -143,7 +143,7 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
                 /* Open the file as read only */
                 int iFd = open(iFile,O_RDONLY);
                 if (iFd < 0) {
-                    printf("Error: %s does not exist or is a directory\n",iFile);
+                    printf("-iosh: IO Error. %s does not exist or is a directory\n",iFile);
                     exit(0); /* in File didn't exist terminate */
                 }
                 /* Set the STDIN of the child to the input file */
@@ -159,7 +159,7 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
                 int oFd = open(oFile,O_WRONLY|O_TRUNC|O_CREAT,S_IRUSR|S_IWUSR|S_IRGRP);
                 /* If file could not be opened error and terminate */
                 if (oFd < 0){
-                    printf("Error: %s could not be opened or created\n",oFile);
+                    printf("-iosh: IO Error: %s could not be opened or created\n",oFile);
                     exit(0);
                 }
                 dup2(oFd,STDOUT_FILENO);
@@ -172,7 +172,7 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
         }
         wait(&pid); /* Wait for child to terminate */
     }else{
-        printf("Error: %s does not exist or is not executable\n",mArgs[0]);
+        printf("-iosh: IO Error: %s does not exist or is not executable\n",mArgs[0]);
     }
 }
 
