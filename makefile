@@ -1,7 +1,7 @@
 #Makefile for CS485 project 3
 #Created by Libby and Kyle
 GCC = gcc -Wall -pedantic
-OBJECTS = lex.yy.o main.o stripper.o tokenGen.o
+OBJECTS = lex.yy.o main.o stripper.o tokenGen.o actions.o
 HEADERS = global.h
 
 ioShell: $(OBJECTS) pTest.o

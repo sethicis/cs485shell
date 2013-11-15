@@ -71,3 +71,4 @@ void parse(void);                  /* Parse the linked list of tokens */
 void stripOut(char*);              /* Removes the quotes from string type tokens */
 void handleCmd(void);               /* Prepares token values for execution */
 void exCmd(char**,char*,char*);     /* Creates child process are starts program */
+void cleanup(token*);                /* Destroy unneeded tokens */

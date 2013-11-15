@@ -4,6 +4,7 @@
 */
 
 #include <stdio.h>  /* For IO operations */
+#include <string.h> /* For strcmp */
 #include "global.h" /* For globally defined values */
 #include <stdlib.h> /* For open and other system calls */
 #include <unistd.h> /* For IO redirection */
@@ -124,7 +125,7 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
                 dup2(oFd,STDOUT_FILENO);
                 close(oFd);
             }
-            int retVal = execv(mArgs[0],mArgs); /* Create start the program */
+            execv(mArgs[0],mArgs); /* Create start the program */
             /* If execv returned then it's because something went wrong */
             /* Terminate */
             exit(0);
