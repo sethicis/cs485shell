@@ -17,7 +17,8 @@ Edit Date: 11/10/2013 */
 #define TWORD           "word\0"
 #define TSTRING         "string\0"
 #define TMETA           "metachar\0"
-#define TEOL            "end-of-line\0"
+#define TEOL		"end-of-line\0"
+#define SEOL		"single-eol\0"
 #define USETPROMPT	"setprompt\0"
 #define UPOUND		"#\0"
 #define UCHDIR		"chdir\0"
@@ -32,7 +33,7 @@ char* cPrompt;  /* The prompt for the ioShell program */
 int debugFlag; /* Global variable for the debug command */
 char* wkDir; /* Global variable for the current working directory */
 int errFlag; /* Global variable used to flag code errors */
-
+int empty;
 /* Our token "object" that will be passed around */
 typedef struct token token;
 /* Defines the enum set for token usage */

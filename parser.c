@@ -17,11 +17,23 @@
 /* Simple parse function that traverses the linked list and prints out
  the token type and value until the end of list is reached */
 void parse(){
+	//printf("I entered parse\n");
     /*int count = 1; TO BE REMOVED */
     token* reader = fTok;
+   // printf("%s\n", reader->type);
+   // printf("value %s\n", reader->val);
+   // printf("next %s\n", reader->next);
+   // printf("I assigned reader\n");
     while (reader != NULL) {
+	   // printf("I'm in the while loop\n");
+	if (strcmp(fTok->type, TEOL) == 0) {
+		reader->usage = EOL;
+		reader = reader->next;
+		empty = 1;
+		//printf("I got this far\n");
+	}
         /*Recognize comment lines*/
-        if (strcmp(fTok->val, UPOUND) == 0) {
+	else if (strcmp(fTok->val, UPOUND) == 0) {
             reader->usage = COMMENT;
             /* If the first token is a # then all tokens till EOL are comments */
             while (reader->next != NULL) {
@@ -196,4 +208,5 @@ void parse(){
      reader = reader->next;
   }
 }
+//printf("I'm leaving parser\n");
 }

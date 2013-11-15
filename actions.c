@@ -53,6 +53,10 @@ void decide(){
             case IFILE:
                 handleCmd(); /* If the first token's usage is IFILE, then it must be a command */
                 break;
+	    case EOL:
+	//	if (empty == 1) {
+	//		printf("i'm so empty inside % ");
+	//	}
             /*case QUIT:
                 printf("This case shouldn't run...\n");
                 terminate();

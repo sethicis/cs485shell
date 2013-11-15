@@ -18,16 +18,22 @@ int main(int argc,char** argv){
     locate();
     /* Initalize fTok on startup */
     fTok = newToken();
+  //  printf("%s\n", fTok->type);
     lTok = fTok;  /* Only one token, thus first and last are the same */
     errFlag = 0; /* No errors seen yet */
     cPrompt = "iosh % \0";
     printf("%s ",cPrompt); /* Print the default prompt to the terminal */
-    while (scan() == 0) { /* While the EOF flag is not seen keep */
-        if (debugFlag == 1) {                  /* scanning and parsing */
-            parse();
+   // printf("I went to the parser\n");
+    while (scan() == 0) {
+	//    printf("I'm in the while loop\n");
+ /* While the EOF flag is not seen keep */
+        if (debugFlag == 1) {
+           // printf("I went to debug parse\n");		/* scanning and parsing */
+            parse(); 
             debug();
         }           /* Parse the strings passed */
         else {
+	 // printf("I went to parse\n");
           parse();
         }
         /* Determine what actions to take based on parser assigned usages to tokens */
@@ -36,6 +42,7 @@ int main(int argc,char** argv){
         printf("%s ",cPrompt);
         //printf("After prompt\n");
     }
+    
     printf("Exitting\n");
     terminate();      /* Clean up the last memory leak */
     /*free(wkDir);   */

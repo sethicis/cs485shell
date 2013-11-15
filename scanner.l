@@ -27,7 +27,7 @@ meta    [<>#]
 {word}          {cTok = linkTok(cTok,TWORD,yytext);}
 {string}        {cTok = linkTok(cTok,TSTRING,yytext);}
 {meta}          {cTok = linkTok(cTok,TMETA,yytext);}
-{EOL}           {cTok = linkTok(cTok,TEOL,yytext); if (cTok != fTok) return 0;}
+{EOL}           {cTok = linkTok(cTok,TEOL,yytext); return 0;}
 <<EOF>>         {return -1;}
 .               {/*Do nothing*/}
 %%
