@@ -132,9 +132,6 @@ void parse(){
                 printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n");
                 errFlag = 1; /* Set error flag */
                 /* Syntax error means usage is undefined for all but EOL */
-                while (reader->next != NULL){
-                    reader = reader->next;
-                }
             }
             reader->usage = EOL;
             reader = reader->next; /* Leave while loop */
@@ -145,12 +142,15 @@ void parse(){
             reader = reader->next;
                 if (strcmp(reader->type, TEOL) != 0) {
                     printf("-iosh: Unrecognized command.  To quit, type 'quit' and press enter.\n");
+                    errFlag = 1; /* Set error flag */
                 }
-                else {
-                    reader->usage = EOL;
-                }
+            while (reader->next != NULL){
+                reader = reader->next;
+                /* All non EOL tokens are undefined in this context */
+            }
+            reader->usage = EOL;
+            reader = reader->next; /* Exit the while loop */
         }
-  
   else {
       /*token?*/
       while (reader->next != NULL) {

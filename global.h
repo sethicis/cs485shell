@@ -11,7 +11,6 @@ Edit Date: 11/10/2013 */
 /* Create for CS485 Project 3 */
 /* Authors: Libby and Kyle */
 
-
 /* NOTE: The Buffer defines may not be needed anymore */
 #define MAXBUFF         256 /* Maximum buffer size for value string */
 #define TYPEBUFF        20  /* Maximum buffer size for type strings */
@@ -26,8 +25,8 @@ Edit Date: 11/10/2013 */
 #define UOFF		"off\0"
 #define UON		"on\0"
 #define UQUIT		"quit\0"
-
-
+#define LTHAN   "<\0"
+#define GTHAN   ">\0"
 
 char* cPrompt;  /* The prompt for the ioShell program */
 int debugFlag; /* Global variable for the debug command */

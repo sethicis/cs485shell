@@ -22,7 +22,7 @@ void debug(){
         printf("\t\tToken Type: %s\n",tok->type);
         switch (tok->usage) {
             case NIL:
-                tokU = "NULL\0";
+                tokU = "UNDEFINED\0";
                 break;
             case COMMENT:
                 tokU = "COMMENT\0";
