@@ -139,6 +139,66 @@ void parse(){
             reader->usage = EOL;
             reader = reader->next; /* Leave while loop */
         }
-    }
+        /* Case QUIT */
+        else if (strcmp(reader->val, UQUIT) == 0) {
+            reader->usage = QUIT;
+            reader = reader->next;
+                if (strcmp(reader->type, TEOL) != 0) {
+                    printf("-iosh: Unrecognized command.  To quit, type 'quit' and press enter.\n");
+                }
+                else {
+                    reader->usage = EOL;
+                }
+        }
+  
+  else {
+      /*token?*/
+      while (reader->next != NULL) {
+        if (strcmp(reader->type, TMETA)) {
+          if (reader->prev == NULL) {
+            printf("-iosh: Illegal syntax.  Metacharacters cannot occur at the beginning of a line.\n");
+          }
+          else if (strcmp(reader->next->type, TMETA) == 0) {
+            printf("-iosh: Illegal syntax.  Cannot have two adjacent metacharacters.\n");
+          }
+          reader->usage = META;
+        }
+       
+        else if (strcmp(reader->type, TSTRING)) {
+          if (reader->prev == NULL) {
+            printf("-iosh: Illegal syntax.  Cannot parse string literal as first token.");
+          }
+          else if (strcmp(reader->next->val, LTHAN) == 0) {
+            reader->usage = IFILE;
+          }
+          else {
+            reader->usage = STRING;
+          }
+        }
+
+        else if (strcmp(reader->type, TWORD)) {
+          if (reader->prev == NULL) {
+            reader->usage = CMD;
+          }
+          else if (strcmp(reader->next->val, LTHAN) == 0) {
+            reader->usage = IFILE;
+          }
+          else if (strcmp(reader->next->val, GTHAN) == 0) {
+            reader->usage = CMD;
+          }
+          else if (strcmp(reader->prev->val, LTHAN) == 0) {
+            reader->usage = CMD;
+          }
+          else if (strcmp(reader->prev->val, GTHAN) == 0) {
+            reader->usage = OFILE;
+          }
+          else {
+            reader->usage = ARG;
+          }
+        }
+        reader = reader->next;
+      }
+  }
+}
     printf("End of parse...\n");
 }
