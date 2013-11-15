@@ -47,7 +47,7 @@ token* linkTok(token* tok, char* TYPE,char* value){
     else if (strcmp(TYPE,TEOL) == 0){
         assignTok(tok,"EOL\0",TYPE); /* End of line token */
         tok->next = NULL;           /* End of line token marks end of list */
-        lTok = tok;                 /* Point to the last token in the list */
+        lTok = tok;
         return tok;       /* End of linked list of tokens */
     }
     else{

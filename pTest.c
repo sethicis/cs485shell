@@ -17,9 +17,8 @@
 /* Simple parse function that traverses the linked list and prints out
  the token type and value until the end of list is reached */
 void parse(){
-    int count = 1;
+    /*int count = 1; TO BE REMOVED */
     token* tok = fTok;
-    token* lTok = NULL;
     token* reader = fTok;
     while (tok != NULL) {
 
@@ -90,13 +89,12 @@ void parse(){
     tok = tok->next;
   }
 
-			
-        if (tok->next == NULL){ /* Keep track of the last token to save
-                                 computation time when deleting */
+		/*
+        if (tok->next == NULL){ /
             lTok = tok;
         }
         tok = tok->next;
-        count++;
-    cleanup(lTok); /* Remove the no longer needed tokens */
+        count++;*/
+    cleanup(); /* Remove the no longer needed tokens */
 }
 }

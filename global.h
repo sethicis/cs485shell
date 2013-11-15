@@ -31,6 +31,7 @@ Edit Date: 11/10/2013 */
 
 char* cPrompt;  /* The prompt for the ioShell program */
 int debugFlag; /* Global variable for the debug command */
+char* wkDir; /* Global variable for the current working directory */
 
 /* Our token "object" that will be passed around */
 typedef struct token token;
@@ -41,7 +42,7 @@ typedef enum{
     SPROMPT,
     DEBUG,
     CD,
-    BIN,
+    CMD,
     IFILE,
     OFILE,
     META,
@@ -72,4 +73,7 @@ void parse(void);                  /* Parse the linked list of tokens */
 void stripOut(char*);              /* Removes the quotes from string type tokens */
 void handleCmd(void);               /* Prepares token values for execution */
 void exCmd(char**,char*,char*);     /* Creates child process are starts program */
-void cleanup(token*);                /* Destroy unneeded tokens */
+void cleanup(void);                /* Destroy unneeded tokens */
+void locate(void);                  /* Determines what the current working directory */
+void decide(void);                   /* Determines which actions to take on the parsed tokens */
+void terminate(void);               /* Used to gracefully shutdown the shell */

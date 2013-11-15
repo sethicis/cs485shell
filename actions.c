@@ -1,6 +1,9 @@
 /*
   actions.c
   Created by Kyle Blagg And Libby Ferland.
+ 
+ The bulk of the action DO STUFF functions are located in this module,
+ including the decide function which handles determining what actions to launch.
 */
 
 #include <stdio.h>  /* For IO operations */
@@ -10,6 +13,10 @@
 #include <unistd.h> /* For IO redirection */
 #include <fcntl.h>  /* For file descriptor operations */
 
+/* This function handle determining what actions to launch for the
+ parsed tokens.  If the first token doesn't match any of the expected
+ usage cases, then the decide() function does nothing.
+ */
 void decide(){
     switch (fTok->usage) {
         case SPROMPT:
@@ -20,14 +27,31 @@ void decide(){
             /* Do nothing */
             break;
         case DEBUG:
-            if (strcmp(fTok->next->val,"on\0")) {
+            if (strcmp(fTok->next->val,"on\0") == 0) {
                 debugFlag = 1;
             }
-            if (strcmp) {
-                <#statements#>
+            else if (strcmp(fTok->next->val,"off\0") == 0) {
+                debugFlag = 0;
+            }else{
+                /* The token value after debug was not of the expected form */
+                printf("Error: debug [on|off] parameter passed was: %s\n",fTok->next->val);
             }
+            break;
         case CD:
+            /* Change working directory, and if error notify */
+            if (chdir(fTok->next->val) < 0) {
+                printf("Error: Directory %s either does not exist or cannot be accessed\n",fTok->next->val);
+            }
+            break;
+        case CMD:
+            handleCmd(); /* Take care of the command call */
+            break;
+        case IFILE:
+            handleCmd(); /* If the first token's usage is IFILE, then it must be a command */
+            break;
         default:
+            /* Most likely a NIL or STRING or some other odd first token usage */
+            /* Do nothing */
             break;
     }
 }
@@ -53,7 +77,7 @@ void handleCmd(){
         else if(aTok->usage == OFILE){
             oFile = aTok->val;
         }
-        else if(aTok->usage == BIN){
+        else if(aTok->usage == CMD){
             cmdTok = aTok;
         }
         else if(aTok->usage == ARG && argTok == NULL){
@@ -139,8 +163,15 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
     }
 }
 
+/* Allows for graceful termination of the shell program */
+void terminate(){
+    cleanup(); /* Makesure all the tokens in the linked list are destroyed */
+    free(fTok); /* Release the dynamically allocated space for fTok */
+    exit(0); /* Our work here is done. */
+}
+
 /* Deletes the dynamically allocated tokens */
-void cleanup(token* lTok){
+void cleanup(){
     token* nTok;            /* Temporary token used for position tracking */
     if (lTok->prev != NULL){ /* While not fTok */
         nTok = lTok->prev;      /* Keep track of the parent token */
@@ -148,4 +179,14 @@ void cleanup(token* lTok){
         lTok = nTok;
     }
     /* All but the fTok values have been freed */
+}
+
+/* Determines the current working directory */
+void locate(){
+    long size; /* Size of the char array to generate */
+    size = pathconf(".",_PC_PATH_MAX); /* Gets the maximum path size of the machine */
+    char* buf;
+    if ((buf = (char*)malloc(size)) != NULL){
+        wkDir = getcwd(buf,(size_t)size);
+    }
 }

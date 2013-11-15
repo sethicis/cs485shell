@@ -14,6 +14,8 @@
 #include "global.h" /* Used for global variables */
 
 int main(int argc,char** argv){
+    /* Find out where our working directory is */
+    locate();
     /* Initalize fTok on startup */
     fTok = newToken();
     cPrompt = (char*)malloc(sizeof("iosh % \0"));
@@ -21,10 +23,11 @@ int main(int argc,char** argv){
     printf("%s ",cPrompt); /* Print the default prompt to the terminal */
     while (scan() == 0) { /* While the EOF flag is not seen keep 
                            scanning and parsing */
-        parse();
+        parse();           /* Parse the strings passed */
+        decide();   /* Determine what actions to take based on parser assigned usages to tokens */
         printf("%s ",cPrompt);
     }
-	printf("Exitting!\n");  /* TODO: Remove print statement */
-    free(fTok);             /* Clean up the last memory leak */
+    terminate();      /* Clean up the last memory leak */
+    /*free(wkDir);   */
     return 0;
 }
