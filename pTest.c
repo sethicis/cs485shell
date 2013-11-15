@@ -3,8 +3,10 @@
   
 
 *  Created by Kyle Blagg on 11/11/13.
+*  Edited by Libby Ferland on 11/14/13.
 *  This module is used for testing the token linked list
 *  and can be used as an example for how to traverse the linked list.
+*  This module handles system commands and error handling.
 */
 
 #include <stdio.h>
@@ -73,7 +75,26 @@ void parse(){
 	  printf("debug: I will change directory.\n");
         }
       }
-    }  
+    }
+
+  else if (strcmp(reader->val, UDEBUG) == 0) {
+    reader = reader->next;
+    reader = reader->next;
+    tok = tok->next;
+    if (strcmp(reader->type, TEOL) != 0) {
+      printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n"); }
+    else if (strcmp(tok->val, UON) == 0) {
+      printf("debug: Turning debug ON. \n");
+      /*do something here*/
+      }
+    else if (strcmp(tok->val, UOFF) == 0) {
+      printf("debug: Turning debug OFF. \n");
+      /*do something else here*/
+    }
+    else {
+      printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n");  
+    }
+   }
 
   while (tok->next != NULL) {
     tok = tok->next;
