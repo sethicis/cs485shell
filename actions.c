@@ -22,7 +22,6 @@ static long pathSize; /* Size of the char array to generate */
 void decide(){
     /* If there are syntax errors then don't do anything */
     if (errFlag == 0) {
-        printf("Starting Decide()\n");
         switch (fTok->usage) {
             case SPROMPT:
                 /* Gets the value of token after fTok */
@@ -47,7 +46,6 @@ void decide(){
                 if (chdir(fTok->next->val) != 0) {
                     printf("-iosh: chdir %s Error. Directory %s either does not exist or cannot be accessed\n",fTok->next->val,fTok->next->val);
                 }
-                printf("The working directory is: %s\n",getcwd(wkDir,(size_t)pathSize));
                 break;
             case CMD:
                 handleCmd(); /* Take care of the command call */
@@ -65,7 +63,6 @@ void decide(){
                 break;
         }
         cleanup(); /* Remove unneeded tokens */
-        printf("Leaving decide()\n");
     }
 }
 
@@ -98,9 +95,7 @@ void handleCmd(){
                 argTok = aTok;
             argc++; /* Increment the count of arguments */
         }
-        /*else{
-            
-        }*/
+        aTok = aTok->next; /* Keep doing this until end of token list */
     }
     /* Make argument array */
     mArgs = (char**)malloc(sizeof(char**)*(argc+2));
@@ -162,8 +157,9 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
                     printf("-iosh: IO Error: %s could not be opened or created\n",oFile);
                     exit(0);
                 }
-                dup2(oFd,STDOUT_FILENO);
-                close(oFd);
+                dup2(oFd,STDOUT_FILENO); /* Redirect the output file to STDOUT */
+                dup2(oFd,STDERR_FILENO);/* Write errors to file by redirecting STDERR */
+                close(oFd); /* Don't need this anymore */
             }
             execv(mArgs[0],mArgs); /* Create start the program */
             /* If execv returned then it's because something went wrong */
@@ -201,6 +197,5 @@ void locate(){
     char* buf;
     if ((buf = (char*)malloc(pathSize)) != NULL){
         wkDir = getcwd(buf,(size_t)pathSize);
-        printf("The working directory is: %s\n",wkDir);
     }
 }

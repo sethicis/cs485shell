@@ -15,7 +15,7 @@ token* cTok;  /* Current token initially points to the fTok */
 /******* Definitions *******/
 delim   [\t ]
 ws      {delim}+
-path    [0-9a-zA-Z//]
+path    [0-9a-zA-Z/.//-]
 EOL     (\n)
 word    {path}+
 string  (\".+\")

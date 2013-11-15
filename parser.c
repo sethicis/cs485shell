@@ -18,7 +18,6 @@
  the token type and value until the end of list is reached */
 void parse(){
     /*int count = 1; TO BE REMOVED */
-    printf("In parser()\n");
     token* reader = fTok;
     while (reader != NULL) {
         /*Recognize comment lines*/
@@ -172,16 +171,14 @@ void parse(){
             reader->usage = STRING;
           }
         }
-
+          /* determine usage of word type tokens */
         else if (strcmp(reader->type, TWORD) == 0) {
           if (reader->prev == NULL) {
-            reader->usage = CMD;
-          }
-          else if (strcmp(reader->next->val, LTHAN) == 0) {
-            reader->usage = IFILE;
-          }
-          else if (strcmp(reader->next->val, GTHAN) == 0) {
-            reader->usage = CMD;
+              if (strcmp(reader->next->val,LTHAN) == 0) {
+                  reader->usage = IFILE;
+              }
+              else
+                  reader->usage = CMD;
           }
           else if (strcmp(reader->prev->val, LTHAN) == 0) {
             reader->usage = CMD;
@@ -199,5 +196,4 @@ void parse(){
      reader = reader->next;
   }
 }
-    printf("End of parse...\n");
 }
