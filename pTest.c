@@ -42,15 +42,15 @@ void parse(){
     else if (strcmp(reader->val, USETPROMPT) == 0) {
       reader = reader->next;
       if (strcmp(reader->type, TSTRING) != 0) {
-        printf("Cannot set prompt without a string!\n");
+        printf("-iosh: Cannot set prompt without a string!\n");
       }
       else {
         reader = reader->next;
         if (strcmp(reader->type, TEOL) != 0) {
-          printf("Cannot take multiple arguments in setprompt!\n");
+          printf("-iosh: Cannot take multiple arguments in setprompt!\n");
         }
         else {
-	  printf("I will set your prompt\n");
+	  printf("debug: I will set your prompt\n");
         }
       } 
    }
@@ -59,18 +59,18 @@ void parse(){
     else if (strcmp(reader->val, UCHDIR) == 0) {
       reader = reader->next;
       if (strcmp(reader->type, TMETA) == 0) {
-	printf("Cannot use a metacharacter in chdir command./n");
+	printf("-iosh: Cannot use a metacharacter in chdir command.\n");
       }
       else if (strcmp(reader->type, TEOL) == 0) {
-	printf("You must enter a directory name!");
+	printf("-iosh: You must enter a directory name!\n");
       }
       else {
 	reader = reader->next;
 	if (strcmp(reader->type, TEOL) != 0) {
-          printf("Cannot handle multiple arguments in a chdir request./n");
+          printf("-iosh: Cannot handle multiple arguments in a chdir request.\n");
 	}
 	else {
-	  printf("I will change directory/n");
+	  printf("debug: I will change directory.\n");
         }
       }
     }  
