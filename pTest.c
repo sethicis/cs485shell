@@ -11,16 +11,6 @@
 #include "global.h"
 #include <stdlib.h>
 
-/* Deletes the dynamically allocated tokens */
-void cleanup(token* lTok){
-    token* nTok;            /* Temporary token used for position tracking */
-    if (lTok->prev != NULL){ /* While not fTok */
-        nTok = lTok->prev;      /* Keep track of the parent token */
-        free(lTok);             /* Release the dynamically allocated memeory */
-        lTok = nTok;
-    }
-    /* All but the fTok values have been freed */
-}
 /* Simple parse function that traverses the linked list and prints out
  the token type and value until the end of list is reached */
 void parse(){
@@ -30,7 +20,8 @@ void parse(){
     while (tok != NULL) {
         printf("\t\tToken #: %d\n",count);
         printf("\t\tToken Type: %s\n",tok->type);
-        printf("\t\tToken Value: %s\n\n",tok->val);
+        printf("\t\tToken Value: %s\n",tok->val);
+        printf("\t\tToken Usage: %d\n",tok->usage);
         if (tok->next == NULL){ /* Keep track of the last token to save
                                  computation time when deleting */
             lTok = tok;

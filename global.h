@@ -21,21 +21,24 @@ Edit Date: 11/10/2013 */
 #define TEOL            "end-of-line\0"
 
 char* cPrompt;  /* The prompt for the ioShell program */
+int debugFlag; /* Global variable for the debug command */
 
 /* Our token "object" that will be passed around */
 typedef struct token token;
 /* Defines the enum set for token usage */
 typedef enum{
-    NIL = 0,
-    COMMENT = 1,
-    SPROMPT = 2,
-    DEBUG = 3,
-    CD = 4,
-    BIN = 5,
-    META = 6,
-    QUIT = 7,
-    STRING = 8,
-    ARG = 9
+    NIL,
+    COMMENT,
+    SPROMPT,
+    DEBUG,
+    CD,
+    BIN,
+    IFILE,
+    OFILE,
+    META,
+    QUIT,
+    STRING,
+    ARG
 } tUsage;
 struct token{
 /*@param val: the actual contents of the token (eg. filepath) 
@@ -57,4 +60,5 @@ token* linkTok(token*,char*,char*);   /* Inserts token into linked list */
 void assignTok(token*,char*,char*);   /* Assigns the value and type to the given token */
 void parse(void);                  /* Parse the linked list of tokens */
 void stripOut(char*);              /* Removes the quotes from string type tokens */
-
+void handleCmd(void);               /* Prepares token values for execution */
+void exCmd(char**,char*,char*);     /* Creates child process are starts program */

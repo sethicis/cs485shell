@@ -8,7 +8,7 @@
 int pid; /* Used to keep track of child proc ID */
 char* mFILE = "example.txt"; /* File containing the info to redirect */
 char* mPROG = "/bin/cat"; /* Program to call */
-char* mARGS[2] = {"cat",0}; /* Arguments for mPROG needs mPROG name as mARGS[0] */
+char* mARGS[] = {"/bin/cat",'\0'}; /* Arguments for mPROG needs mPROG name as mARGS[0] */
 
 int main(int argc,char** argv){
 	/* The child process gets its STDIN redirected to mFILE */
@@ -16,7 +16,7 @@ int main(int argc,char** argv){
 		int fdIn = open(mFILE,O_RDONLY); /* Open mFILE */
 		dup2(fdIn,STDIN_FILENO); /* Redirect the mFILE pointer to STDIN*/
 		close(fdIn); /* Close it up */
-		execl(mPROG,mARGS[0],mARGS[1]); /* Calls PROG, with ARGS */
+		execv(mARGS[0],mARGS); /* Calls PROG, with ARGS */
 	}
 	wait(&pid);
 	return 0;

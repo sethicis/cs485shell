@@ -22,6 +22,9 @@ stripper.o: $(HEADERS) stripper.c
 tokenGen.o: $(HEADERS) tokenGen.c
 	$(GCC) -c tokenGen.c
 
+actions.o: $(HEADERS) actions.c
+	$(GCC) -c actions.c
+
 pTest.o: $(HEADERS) pTest.c
 	$(GCC) -c pTest.c
 
