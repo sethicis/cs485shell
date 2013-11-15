@@ -26,6 +26,9 @@ token* newToken(){
 
 /* This helper function insures that the char* values get allocated
  and assigned on token Linage.
+ @param tok: Contains the token to populate
+ @param val: The value to set for the token.
+ @param T: The type to set for the token.
  */
 void assignTok(token* tok,char* val,char* T){
     tok->val = (char*)malloc(strlen(val));

@@ -67,9 +67,9 @@ void decide(){
  @RETURN: void
  */
 void handleCmd(){
-    int argc = 0; /* Number of arguments being passed to the cmd */
-    char* iFile = NULL; char* oFile = NULL; char** mArgs;
-    token* aTok = fTok; token* argTok = NULL; token* cmdTok = NULL;
+    int argc; argc = 0; /* Number of arguments being passed to the cmd */
+    char* iFile; iFile = NULL; char* oFile; oFile = NULL; char** mArgs;
+    token* aTok; aTok = fTok; token* argTok = NULL; token* cmdTok = NULL;
     while (aTok != NULL){
         if (aTok->usage == IFILE) {
             iFile = aTok->val;
@@ -95,7 +95,7 @@ void handleCmd(){
     /* argc + 2 because we will always have the program name and the null terminating character in the array */
     /* If we have any argument tokens, place them into the array */
     if (argTok != NULL) {
-        int i = 1; /* index into argument array */
+        int i; i = 1; /* index into argument array */
         while (argTok->usage == ARG) {
             mArgs[i++] = argTok->val;
             argTok = argTok->next;

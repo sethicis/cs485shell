@@ -21,7 +21,7 @@ token* linkTok(token* tok, char* TYPE,char* value){
         assignTok(tok,value,TYPE); /* Assign the token values */
             /* Create a new token, set it's previous pointer to the current token,
              then set the current token's next pointer to the new token. */
-        token* tmpTok = newToken();
+        token* tmpTok; tmpTok = newToken();
         tmpTok->prev = tok;
         tok->next = tmpTok;
         return tmpTok;
@@ -30,7 +30,7 @@ token* linkTok(token* tok, char* TYPE,char* value){
     else if (strcmp(TYPE,TSTRING) == 0){
         stripOut(value);
         assignTok(tok,value,TYPE);
-        token* tmpTok = newToken();
+        token* tmpTok; tmpTok = newToken();
         tmpTok->prev = tok;
         tok->next = tmpTok;
         return tmpTok;
@@ -38,7 +38,7 @@ token* linkTok(token* tok, char* TYPE,char* value){
         /* Case: token type META */
     else if (strcmp(TYPE,TMETA) == 0){
         assignTok(tok,value,TYPE);
-        token* tmpTok = newToken();
+        token* tmpTok; tmpTok = newToken();
         tmpTok->prev = tok;
         tok->next = tmpTok;
         return tmpTok;
