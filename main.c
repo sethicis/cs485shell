@@ -18,15 +18,23 @@ int main(int argc,char** argv){
     locate();
     /* Initalize fTok on startup */
     fTok = newToken();
-    cPrompt = (char*)malloc(sizeof("iosh % \0"));
-    cPrompt = "iosh %";
+    lTok = fTok;  /* Only one token, thus first and last are the same */
+    errFlag = 0; /* No errors seen yet */
+    cPrompt = "iosh % \0";
     printf("%s ",cPrompt); /* Print the default prompt to the terminal */
     while (scan() == 0) { /* While the EOF flag is not seen keep 
                            scanning and parsing */
         parse();           /* Parse the strings passed */
-        decide();   /* Determine what actions to take based on parser assigned usages to tokens */
+        if (debugFlag == 1) {
+            debug();
+        }
+        /* Determine what actions to take based on parser assigned usages to tokens */
+        decide();
+        //printf("Returned from Decide()\n");
         printf("%s ",cPrompt);
+        //printf("After prompt\n");
     }
+    printf("Exitting\n");
     terminate();      /* Clean up the last memory leak */
     /*free(wkDir);   */
     return 0;

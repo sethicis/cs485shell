@@ -18,16 +18,20 @@
  the token type and value until the end of list is reached */
 void parse(){
     /*int count = 1; TO BE REMOVED */
-    token* tok = fTok;
+    printf("In parser()\n");
     token* reader = fTok;
-    while (tok != NULL) {
-        
+    while (reader != NULL) {
         /*Recognize comment lines*/
-        if (strcmp(reader->val, UPOUND) == 0) {
+        if (strcmp(fTok->val, UPOUND) == 0) {
             reader->usage = COMMENT;
-            while (tok->next != NULL) {
-                tok = tok->next;
+            /* If the first token is a # then all tokens till EOL are comments */
+            while (reader->next != NULL) {
+                reader->usage = COMMENT;
+                reader = reader->next;
             }
+            /* End of line token */
+            reader->usage = EOL;
+            reader = reader->next;
         }
         
         /*Recognize setprompt*/
@@ -36,77 +40,105 @@ void parse(){
             reader = reader->next;
             if (strcmp(reader->type, TSTRING) != 0) {
                 printf("-iosh: Cannot set prompt without a string!\n");
+                errFlag = 1;
+                while (reader->next != NULL) {
+                    reader = reader->next;
+                    /* All token usages are undefined until EOL */
+                }
+                reader->usage = EOL; /* End of line token */
+                reader = reader->next;/* Set to null to leave while loop */
             }
             else {
                 reader->usage = STRING;
                 reader = reader->next;
                 if (strcmp(reader->type, TEOL) != 0) {
                     printf("-iosh: Cannot take multiple arguments in setprompt!\n");
+                    errFlag = 1; /* Flag fTok for error */
+                    while (reader->next != NULL) {
+                        reader = reader->next;
+                        /* All token usages are undefined until EOL */
+                    }
+                    reader->usage = EOL;
+                    reader = reader->next; /* Set to null to leave while loop */
                 }
                 else {
                     reader->usage = EOL;
-                    printf("debug: I will set your prompt\n");
+                    reader = reader->next; /* Set to null to leave while loop */
                 }
             }
         }
         
         /*Recognize chdir*/
         else if (strcmp(reader->val, UCHDIR) == 0) {
-            reader->usage = CHDIR;
+            reader->usage = CD;
             reader = reader->next;
             if (strcmp(reader->type, TMETA) == 0) {
                 reader->usage = META;
                 printf("-iosh: Cannot use a metacharacter in chdir command.\n");
+                errFlag = 1; /* Set error flag */
+                while (reader->next != NULL) {
+                    reader = reader->next;
+                    /* All token usages are undefined until EOL */
+                }
+                reader->usage = EOL;
+                reader = reader->next; /* Leave while loop */
             }
             else if (strcmp(reader->type, TEOL) == 0) {
                 reader->usage = EOL;
                 printf("-iosh: You must enter a directory name!\n");
+                errFlag = 1; /* Flag for error */
             }
             else {
                 reader->usage = ARG;
                 reader = reader->next;
                 if (strcmp(reader->type, TEOL) != 0) {
                     printf("-iosh: Cannot handle multiple arguments in a chdir request.\n");
+                    errFlag = 1; /* Flag for error */
+                    while (reader->next != NULL) {
+                        reader = reader->next;
+                        /* All token usages are undefined until EOL */
+                    }
+                    reader->usage = EOL;
+                    reader = reader->next; /* leave while loop */
                 }
                 else {
                     reader->usage = EOL;
-                    printf("debug: I will change directory.\n");
+                    reader = reader->next; /* leave while loop */
                 }
             }
         }
-        
+        /* Case Debug */
         else if (strcmp(reader->val, UDEBUG) == 0) {
             reader->usage = DEBUG;
             reader = reader->next;
-            reader = reader->next;
-            tok = tok->next;
-            if (strcmp(reader->type, TEOL) != 0) {
-                printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n"); }
-            else if (strcmp(tok->val, UON) == 0) {
-                printf("debug: Turning debug ON. \n");
-                tok->usage = WORD;
-                /*do something here*/
+            if (strcmp(reader->type, TEOL) == 0) {
+                printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n");
+                /* syntax error: Token usage is undefined until EOL */
+                errFlag = 1;
             }
-            else if (strcmp(tok->val, UOFF) == 0) {
-                printf("debug: Turning debug OFF. \n");
-                tok->usage = WORD;
-                /*do something else here*/
+            else if (strcmp(reader->type,TWORD) == 0){
+                reader->usage = WORD;
+                reader = reader->next;
             }
             else {
-                printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n");  
+                printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n");
+                errFlag = 1; /* Set error flag */
+                /* Syntax error means usage is undefined for all but EOL */
+                while (reader->next != NULL){
+                    reader = reader->next;
+                }
             }
+            if (reader->next != NULL) {
+                printf("-iosh: debug: Unknown debug command.  Debug can be turned on or off.\n");
+                errFlag = 1; /* Set error flag */
+                /* Syntax error means usage is undefined for all but EOL */
+                while (reader->next != NULL){
+                    reader = reader->next;
+                }
+            }
+            reader->usage = EOL;
+            reader = reader->next; /* Leave while loop */
         }
-        
-        while (tok->next != NULL) {
-            tok = tok->next;
-        }
-        
-        /*
-         if (tok->next == NULL){ /
-         lTok = tok;
-         }
-         tok = tok->next;
-         count++;*/
-        cleanup(); /* Remove the no longer needed tokens */
     }
+    printf("End of parse...\n");
 }

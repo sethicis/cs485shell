@@ -13,46 +13,55 @@
 #include <unistd.h> /* For IO redirection */
 #include <fcntl.h>  /* For file descriptor operations */
 
+static long pathSize; /* Size of the char array to generate */
+
 /* This function handle determining what actions to launch for the
  parsed tokens.  If the first token doesn't match any of the expected
  usage cases, then the decide() function does nothing.
  */
 void decide(){
-    switch (fTok->usage) {
-        case SPROMPT:
-            /* Gets the value of token after fTok */
-            chPrompt(fTok->next->val); /* Change the prompt */
-            break;
-        case COMMENT:
-            /* Do nothing */
-            break;
-        case DEBUG:
-            if (strcmp(fTok->next->val,"on\0") == 0) {
-                debugFlag = 1;
-            }
-            else if (strcmp(fTok->next->val,"off\0") == 0) {
-                debugFlag = 0;
-            }else{
-                /* The token value after debug was not of the expected form */
-                printf("Error: debug [on|off] parameter passed was: %s\n",fTok->next->val);
-            }
-            break;
-        case CD:
-            /* Change working directory, and if error notify */
-            if (chdir(fTok->next->val) < 0) {
-                printf("Error: Directory %s either does not exist or cannot be accessed\n",fTok->next->val);
-            }
-            break;
-        case CMD:
-            handleCmd(); /* Take care of the command call */
-            break;
-        case IFILE:
-            handleCmd(); /* If the first token's usage is IFILE, then it must be a command */
-            break;
-        default:
-            /* Most likely a NIL or STRING or some other odd first token usage */
-            /* Do nothing */
-            break;
+    /* If there are syntax errors then don't do anything */
+    if (errFlag == 0) {
+        printf("Starting Decide()\n");
+        switch (fTok->usage) {
+            case SPROMPT:
+                /* Gets the value of token after fTok */
+                chPrompt(fTok->next->val); /* Change the prompt */
+                break;
+            case COMMENT:
+                /* Do nothing */
+                break;
+            case DEBUG:
+                if (strcmp(fTok->next->val,UON) == 0) {
+                    debugFlag = 1;
+                }
+                else if (strcmp(fTok->next->val,UOFF) == 0) {
+                    debugFlag = 0;
+                }else{
+                    /* The token value after debug was not of the expected form */
+                    printf("Error: 'debug [on|off]' parameter passed was: %s\n",fTok->next->val);
+                }
+                break;
+            case CD:
+                /* Change working directory, and if error notify */
+                if (chdir(fTok->next->val) != 0) {
+                    printf("Error: Directory %s either does not exist or cannot be accessed\n",fTok->next->val);
+                }
+                printf("The working directory is: %s\n",getcwd(wkDir,(size_t)pathSize));
+                break;
+            case CMD:
+                handleCmd(); /* Take care of the command call */
+                break;
+            case IFILE:
+                handleCmd(); /* If the first token's usage is IFILE, then it must be a command */
+                break;
+            default:
+                /* Most likely a NIL or STRING or some other odd first token usage */
+                /* Do nothing */
+                break;
+        }
+        cleanup(); /* Remove unneeded tokens */
+        printf("Leaving decide()\n");
     }
 }
 
@@ -111,7 +120,7 @@ void handleCmd(){
  for the ioShell
  @param str: The c string to set the cPrompt to.*/
 void chPrompt(char* str){
-    free(cPrompt);
+    cPrompt = (char*)malloc(strlen(str)+1);
     cPrompt = str;
 }
 /* This function handles creating the child process,
@@ -179,14 +188,15 @@ void cleanup(){
         lTok = nTok;
     }
     /* All but the fTok values have been freed */
+    errFlag = 0; /* Reset error flag */
 }
 
 /* Determines the current working directory */
 void locate(){
-    long size; /* Size of the char array to generate */
-    size = pathconf(".",_PC_PATH_MAX); /* Gets the maximum path size of the machine */
+    pathSize = pathconf(".",_PC_PATH_MAX); /* Gets the maximum path size of the machine */
     char* buf;
-    if ((buf = (char*)malloc(size)) != NULL){
-        wkDir = getcwd(buf,(size_t)size);
+    if ((buf = (char*)malloc(pathSize)) != NULL){
+        wkDir = getcwd(buf,(size_t)pathSize);
+        printf("The working directory is: %s\n",wkDir);
     }
 }

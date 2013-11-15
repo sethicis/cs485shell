@@ -31,8 +31,8 @@ token* newToken(){
  @param T: The type to set for the token.
  */
 void assignTok(token* tok,char* val,char* T){
-    tok->val = (char*)malloc(strlen(val));
+    tok->val = (char*)malloc(strlen(val)+1);
     strcpy(tok->val,val);
-    tok->type = (char*)malloc(strlen(T));
+    tok->type = (char*)malloc(strlen(T)+1);
     strcpy(tok->type,T);
 }

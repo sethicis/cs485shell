@@ -32,6 +32,7 @@ Edit Date: 11/10/2013 */
 char* cPrompt;  /* The prompt for the ioShell program */
 int debugFlag; /* Global variable for the debug command */
 char* wkDir; /* Global variable for the current working directory */
+int errFlag; /* Global variable used to flag code errors */
 
 /* Our token "object" that will be passed around */
 typedef struct token token;
@@ -48,7 +49,9 @@ typedef enum{
     META,
     QUIT,
     STRING,
-    ARG
+    ARG,
+    WORD,
+    EOL
 } tUsage;
 struct token{
 /*@param val: the actual contents of the token (eg. filepath) 
@@ -64,6 +67,7 @@ struct token{
 token* fTok; /* Global pointer to the first token in the linked list */
 token* lTok; /* Global pointer to the last token in the linked list */
 
+void debug(void);  /* Traverses the linked list and prints the attributes of every token*/
 void chPrompt(char*);   /* Simple helper function that sets the terminal prompt */
 int scan(void);         /* Scans stdin */
 token* newToken(void);  /* Generates a new token */

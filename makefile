@@ -1,11 +1,11 @@
 #Makefile for CS485 project 3
 #Created by Libby and Kyle
 GCC = gcc -Wall -pedantic
-OBJECTS = lex.yy.o main.o stripper.o tokenGen.o actions.o
+OBJECTS = lex.yy.o main.o parser.o stripper.o tokenGen.o actions.o debug.o
 HEADERS = global.h
 
 ioShell: $(OBJECTS) pTest.o
-	$(GCC) $(OBJECTS) pTest.o -o ioShell
+	$(GCC) $(OBJECTS) -o ioShell
 
 lex.yy.o: $(HEADERS) lex.yy.c
 	$(GCC) -c lex.yy.c
@@ -25,8 +25,11 @@ tokenGen.o: $(HEADERS) tokenGen.c
 actions.o: $(HEADERS) actions.c
 	$(GCC) -c actions.c
 
-pTest.o: $(HEADERS) pTest.c
-	$(GCC) -c pTest.c
+debug.o: $(HEADERS) debug.c
+	$(GCC) -c debug.c
+
+parser.o: $(HEADERS) parser.c
+	$(GCC) -c parser.c
 
 clean:
 	-rm -f *.o lex.yy.c ioShell
