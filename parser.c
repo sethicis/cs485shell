@@ -154,7 +154,7 @@ void parse(){
   else {
       /*token?*/
       while (reader->next != NULL) {
-        if (strcmp(reader->type, TMETA)) {
+        if (strcmp(reader->type, TMETA) == 0) {
           if (reader->prev == NULL) {
             printf("-iosh: Illegal syntax.  Metacharacters cannot occur at the beginning of a line.\n");
           }
@@ -167,9 +167,6 @@ void parse(){
         else if (strcmp(reader->type, TSTRING)) {
           if (reader->prev == NULL) {
             printf("-iosh: Illegal syntax.  Cannot parse string literal as first token.");
-          }
-          else if (strcmp(reader->next->val, LTHAN) == 0) {
-            reader->usage = IFILE;
           }
           else {
             reader->usage = STRING;
