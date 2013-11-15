@@ -55,6 +55,10 @@ void decide(){
             case IFILE:
                 handleCmd(); /* If the first token's usage is IFILE, then it must be a command */
                 break;
+            /*case QUIT:
+                printf("This case shouldn't run...\n");
+                terminate();
+                break; This case should run in parse.*/
             default:
                 /* Most likely a NIL or STRING or some other odd first token usage */
                 /* Do nothing */

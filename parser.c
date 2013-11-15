@@ -149,7 +149,7 @@ void parse(){
                 /* All non EOL tokens are undefined in this context */
             }
             reader->usage = EOL;
-            reader = reader->next; /* Exit the while loop */
+            terminate(); /* No need to analyze this, we know what to do... */
         }
   else {
       /*token?*/
