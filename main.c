@@ -22,11 +22,13 @@ int main(int argc,char** argv){
     errFlag = 0; /* No errors seen yet */
     cPrompt = "iosh % \0";
     printf("%s ",cPrompt); /* Print the default prompt to the terminal */
-    while (scan() == 0) { /* While the EOF flag is not seen keep 
-                           scanning and parsing */
-        parse();           /* Parse the strings passed */
-        if (debugFlag == 1) {
+    while (scan() == 0) { /* While the EOF flag is not seen keep */
+        if (debugFlag == 1) {                  /* scanning and parsing */
+            parse();
             debug();
+        }           /* Parse the strings passed */
+        else {
+          parse();
         }
         /* Determine what actions to take based on parser assigned usages to tokens */
         decide();
