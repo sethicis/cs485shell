@@ -195,6 +195,8 @@ void parse(){
         }
         reader = reader->next;
       }
+     reader->usage = EOL;
+     reader = reader->next;
   }
 }
     printf("End of parse...\n");
