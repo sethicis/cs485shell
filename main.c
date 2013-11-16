@@ -5,7 +5,7 @@
  CS 485.
  Created by Libby and Kyle
  
- This module initalizes the first Token
+ This module initalizes the first Token, links the Token list, sends the tokens to the parser, and han dles graceful exit.
  
 */
 
@@ -14,37 +14,39 @@
 #include "global.h" /* Used for global variables */
 
 int main(int argc,char** argv){
-    /* Find out where our working directory is */
+    	
+    /*Initialize main function handlers
+     * 1. Find current directory
+     * 2. Intialize first Token for linked list
+     * 3.  Link list
+     * 4.  Set error flags and default prompt */
     locate();
-    /* Initalize fTok on startup */
     fTok = newToken();
-  //  printf("%s\n", fTok->type);
     lTok = fTok;  /* Only one token, thus first and last are the same */
-    errFlag = 0; /* No errors seen yet */
+    errFlag = 0; 
     cPrompt = "iosh % \0";
-    printf("%s ",cPrompt); /* Print the default prompt to the terminal */
-   // printf("I went to the parser\n");
+    printf("%s ",cPrompt); 
+
+    /*Begin scanning and sending data to parser.  While the scanner returns 0 (found EOL, not EOF),
+     * parse each line with debugging information as necessary.  Decide what to do with the tokens
+     * and execute user instructions */
     while (scan() == 0) {
-	//    printf("I'm in the while loop\n");
- /* While the EOF flag is not seen keep */
+
         if (debugFlag == 1) {
-           // printf("I went to debug parse\n");		/* scanning and parsing */
             parse(); 
             debug();
-        }           /* Parse the strings passed */
+        }           
         else {
-	 // printf("I went to parse\n");
-          parse();
+            parse();
         }
-        /* Determine what actions to take based on parser assigned usages to tokens */
+    
         decide();
-        //printf("Returned from Decide()\n");
         printf("%s ",cPrompt);
-        //printf("After prompt\n");
     }
     
-    printf("Exitting\n");
+    printf("Exiting\n");
     terminate();      /* Clean up the last memory leak */
     /*free(wkDir);   */
     return 0;
 }
+/*int main() */

@@ -14,26 +14,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Simple parse function that traverses the linked list and prints out
- the token type and value until the end of list is reached */
+
+/* Simple parse function that traverses the linked list and assigns usage types to tokens
+ * (command, argument, string, etc) based on patterns in the list.  This information is
+ * used by actions.c and the decide() function.  Error handling (syntax and semantics)
+ * is mostly done at this point. */
 void parse(){
-	//printf("I entered parse\n");
-    /*int count = 1; TO BE REMOVED */
+
     token* reader = fTok;
-   // printf("%s\n", reader->type);
-   // printf("value %s\n", reader->val);
-   // printf("next %s\n", reader->next);
-   // printf("I assigned reader\n");
+
     while (reader != NULL) {
-	   // printf("I'm in the while loop\n");
-	if (strcmp(fTok->type, TEOL) == 0) {
-		reader->usage = EOL;
-		reader = reader->next;
-		empty = 1;
-		//printf("I got this far\n");
-	}
+        /*Recognize lines containing only carriage returns */
+	    if (strcmp(fTok->type, TEOL) == 0) {
+		    reader->usage = EOL;
+		    reader = reader->next;
+		    empty = 1;
+	    }
+
         /*Recognize comment lines*/
-	else if (strcmp(fTok->val, UPOUND) == 0) {
+	    else if (strcmp(fTok->val, UPOUND) == 0) {
             reader->usage = COMMENT;
             /* If the first token is a # then all tokens till EOL are comments */
             while (reader->next != NULL) {
@@ -118,6 +117,7 @@ void parse(){
                 }
             }
         }
+
         /* Case Debug */
         else if (strcmp(reader->val, UDEBUG) == 0) {
             reader->usage = DEBUG;
@@ -147,6 +147,7 @@ void parse(){
             reader->usage = EOL;
             reader = reader->next; /* Leave while loop */
         }
+
         /* Case QUIT */
         else if (strcmp(reader->val, UQUIT) == 0) {
             reader->usage = QUIT;
@@ -162,51 +163,56 @@ void parse(){
             reader->usage = EOL;
             terminate(); /* No need to analyze this, we know what to do... */
         }
-  else {
-      /*token?*/
-      while (reader->next != NULL) {
-        if (strcmp(reader->type, TMETA) == 0) {
-          if (reader->prev == NULL) {
-            printf("-iosh: Illegal syntax.  Metacharacters cannot occur at the beginning of a line.\n");
-          }
-          else if (strcmp(reader->next->type, TMETA) == 0) {
-            printf("-iosh: Illegal syntax.  Cannot have two adjacent metacharacters.\n");
-          }
-          reader->usage = META;
-        }
+
+        /*Handle general cases with grammatical patterns */
+        /*Handle metacharacters */
+        else {
+            while (reader->next != NULL) {
+                if (strcmp(reader->type, TMETA) == 0) {
+                    if (reader->prev == NULL) {
+                        printf("-iosh: Illegal syntax.  Metacharacters cannot occur at the beginning of a line.\n");
+                    } 
+                    else if (strcmp(reader->next->type, TMETA) == 0) {
+                        printf("-iosh: Illegal syntax.  Cannot have two adjacent metacharacters.\n");
+                    }        
+                    reader->usage = META;
+                }
        
-        else if (strcmp(reader->type, TSTRING) == 0) {
-          if (reader->prev == NULL) {
-            printf("-iosh: Illegal syntax.  Cannot parse string literal as first token.");
-          }
-          else {
-            reader->usage = STRING;
-          }
+                /*Handle strings */
+                else if (strcmp(reader->type, TSTRING) == 0) {
+                    if (reader->prev == NULL) {
+                        printf("-iosh: Illegal syntax.  Cannot parse string literal as first token.");
+                    } 
+                    else {
+                        reader->usage = STRING;
+                    } 
+                }
+
+                /*Handle words */
+                else if (strcmp(reader->type, TWORD) == 0) {
+                    if (reader->prev == NULL) {
+                        if (strcmp(reader->next->val,LTHAN) == 0) {
+                            reader->usage = IFILE;
+                        } 
+                        else {
+                            reader->usage = CMD;
+                        }
+                    }
+                    else if (strcmp(reader->prev->val, LTHAN) == 0) {
+                        reader->usage = CMD;
+                    } 
+                    else if (strcmp(reader->prev->val, GTHAN) == 0) {
+                        reader->usage = OFILE;
+                    }
+                    else {
+                        reader->usage = ARG;
+                    }
+                }
+                reader = reader->next;
+            }
+            reader->usage = EOL;
+            reader = reader->next;
         }
-          /* determine usage of word type tokens */
-        else if (strcmp(reader->type, TWORD) == 0) {
-          if (reader->prev == NULL) {
-              if (strcmp(reader->next->val,LTHAN) == 0) {
-                  reader->usage = IFILE;
-              }
-              else
-                  reader->usage = CMD;
-          }
-          else if (strcmp(reader->prev->val, LTHAN) == 0) {
-            reader->usage = CMD;
-          }
-          else if (strcmp(reader->prev->val, GTHAN) == 0) {
-            reader->usage = OFILE;
-          }
-          else {
-            reader->usage = ARG;
-          }
-        }
-        reader = reader->next;
-      }
-     reader->usage = EOL;
-     reader = reader->next;
-  }
+    }
 }
-//printf("I'm leaving parser\n");
-}
+/*parser.c*/

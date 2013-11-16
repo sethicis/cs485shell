@@ -24,39 +24,50 @@ void decide(){
     if (errFlag == 0) {
         switch (fTok->usage) {
             case SPROMPT:
-                /* Gets the value of token after fTok */
-                chPrompt(fTok->next->val); /* Change the prompt */
+                /* Gets the value of token after fTok and sets it as prompt */
+                chPrompt(fTok->next->val); 
                 break;
+
             case COMMENT:
                 /* Do nothing */
                 break;
+
             case DEBUG:
                 if (strcmp(fTok->next->val,UON) == 0) {
                     debugFlag = 1;
                 }
                 else if (strcmp(fTok->next->val,UOFF) == 0) {
                     debugFlag = 0;
-                }else{
+                }
+                else{
                     /* The token value after debug was not of the expected form */
-                    printf("-iosh: Illegal syntax. 'debug [on|off]' parameter passed was: %s\n",fTok->next->val);
+                    printf("-iosh: Illegal syntax. 'debug [on|off]' parameter passed was: %s\n",
+                            fTok->next->val);
                 }
                 break;
+
             case CD:
                 /* Change working directory, and if error notify */
                 if (chdir(fTok->next->val) != 0) {
-                    printf("-iosh: chdir %s Error. Directory %s either does not exist or cannot be accessed\n",fTok->next->val,fTok->next->val);
+                    printf("-iosh: chdir %s Error."
+                           "Directory %s either does not exist or cannot be accessed\n",
+                           fTok->next->val,
+                           fTok->next->val);
                 }
                 break;
+
             case CMD:
                 handleCmd(); /* Take care of the command call */
                 break;
+
             case IFILE:
                 handleCmd(); /* If the first token's usage is IFILE, then it must be a command */
                 break;
-	    case EOL:
-	//	if (empty == 1) {
-	//		printf("i'm so empty inside % ");
-	//	}
+
+            case EOL:
+                /*Do nothing */
+                break;
+
             /*case QUIT:
                 printf("This case shouldn't run...\n");
                 terminate();
@@ -81,9 +92,22 @@ void decide(){
  @RETURN: void
  */
 void handleCmd(){
-    int argc; argc = 0; /* Number of arguments being passed to the cmd */
-    char* iFile; iFile = NULL; char* oFile; oFile = NULL; char** mArgs;
-    token* aTok; aTok = fTok; token* argTok = NULL; token* cmdTok = NULL;
+    int argc;
+    char* iFile;
+    char* oFile;
+    char** mArgs;
+    token* aTok;
+    token* argTok;
+    token* cmdTok;
+
+    argc = 0; /* Number of arguments being passed to the cmd */
+    iFile = NULL; 
+    oFile = NULL;
+    aTok = fTok; 
+    argTok = NULL;
+    cmdTok = NULL;
+
+    /*Sort tokens by type */
     while (aTok != NULL){
         if (aTok->usage == IFILE) {
             iFile = aTok->val;
@@ -97,15 +121,18 @@ void handleCmd(){
         else if(aTok->usage == ARG && argTok == NULL){
             if (argTok == NULL) /* Get the first argument token */
                 argTok = aTok;
-            argc++; /* Increment the count of arguments */
-        }
+                argc++; /* Increment the count of arguments */
+            }
         aTok = aTok->next; /* Keep doing this until end of token list */
     }
-    /* Make argument array */
+
+    /* Make argument array
+     * First argument is always the program name
+     * The malloc is set to argc + 2 because we will always have the program name and the null
+     * terminating character in the array.  If we have any argument tokens, they go here. */
     mArgs = (char**)malloc(sizeof(char**)*(argc+2));
-    mArgs[0] = cmdTok->val; /* First argument is always the program name */
-    /* argc + 2 because we will always have the program name and the null terminating character in the array */
-    /* If we have any argument tokens, place them into the array */
+    mArgs[0] = cmdTok->val; 
+  
     if (argTok != NULL) {
         int i; i = 1; /* index into argument array */
         while (argTok->usage == ARG) {
@@ -113,11 +140,14 @@ void handleCmd(){
             argTok = argTok->next;
         }
     }
+
     /* The last argument will always be the null terminator */
     mArgs[argc+1] = '\0';
+
     /* spawns the child process and starts the program with the given args */
     exCmd(mArgs,iFile,oFile);
 }
+
 
 /* This function is used to change the cPrompt
  for the ioShell
@@ -126,6 +156,8 @@ void chPrompt(char* str){
     cPrompt = (char*)malloc(strlen(str)+1);
     cPrompt = str;
 }
+
+
 /* This function handles creating the child process,
  opening any file handles, and redirecting any I/O that needs
  to be redirected.
@@ -203,3 +235,4 @@ void locate(){
         wkDir = getcwd(buf,(size_t)pathSize);
     }
 }
+/*actions.c*/

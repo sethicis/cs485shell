@@ -24,42 +24,55 @@ void debug(){
             case NIL:
                 tokU = "UNDEFINED\0";
                 break;
+           
             case COMMENT:
                 tokU = "COMMENT\0";
                 break;
+           
             case SPROMPT:
                 tokU = "SETPROMPT\0";
                 break;
+           
             case DEBUG:
                 tokU = "DEBUG\0";
                 break;
+           
             case CD:
                 tokU = "CHDIR\0";
                 break;
+           
             case CMD:
                 tokU = "CMD\0";
                 break;
+           
             case IFILE:
                 tokU = "InFile\0";
                 break;
+           
             case OFILE:
                 tokU = "OutFile\0";
                 break;
+           
             case META:
                 tokU = "META\0";
                 break;
+           
             case QUIT:
                 tokU = "QUIT\0";
                 break;
+           
             case STRING:
                 tokU = "STRING\0";
                 break;
+           
             case WORD:
                 tokU = "WORD\0";
                 break;
+           
             case ARG:
                 tokU = "ARG\0";
                 break;
+           
             default:
                 tokU = "EOL\0";
                 break;
@@ -70,3 +83,4 @@ void debug(){
         count++;
     }
 }
+/*debug.c*/

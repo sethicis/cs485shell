@@ -66,3 +66,4 @@ void stripOut(char* tokVal){
     }
     tokVal[strlen(tokVal)-2] = '\0'; /* insert the new null terminating char */
 }
+/*stripper.c*/
