@@ -118,11 +118,12 @@ void handleCmd(){
         else if(aTok->usage == CMD){
             cmdTok = aTok;
         }
-        else if(aTok->usage == ARG && argTok == NULL){
+        else if(aTok->usage == ARG){
             if (argTok == NULL) /* Get the first argument token */
                 argTok = aTok;
-                argc++; /* Increment the count of arguments */
+            argc++; /* Increment the count of arguments */
             }
+        
         aTok = aTok->next; /* Keep doing this until end of token list */
     }
 
@@ -142,9 +143,10 @@ void handleCmd(){
     }
 
     /* The last argument will always be the null terminator */
-    mArgs[argc+1] = '\0';
+    mArgs[argc+1] = 0;
 
     /* spawns the child process and starts the program with the given args */
+    printf("Size of argc array is: %d\n",argc);
     exCmd(mArgs,iFile,oFile);
 }
 
@@ -197,6 +199,13 @@ void exCmd(char** mArgs,char* iFile,char* oFile){
                 dup2(oFd,STDERR_FILENO);/* Write errors to file by redirecting STDERR */
                 close(oFd); /* Don't need this anymore */
             }
+            /* Debugging */
+            int i = 0;
+            while (mArgs[i] != 0) {
+                printf("Value of mArgs[%d]: %s\n",i,mArgs[i]);
+                i++;
+            }
+            /* End Debugging */
             execv(mArgs[0],mArgs); /* Create start the program */
             /* If execv returned then it's because something went wrong */
             /* Terminate */
